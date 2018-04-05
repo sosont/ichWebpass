@@ -6,9 +6,9 @@ import (
 )
 
 var (
-	tcpPort   = flag.Int("tcpport", 0, "Socket连接或者监听的端口")
-	httpPort  = flag.Int("httpport", 0, "当mode为server时为服务端监听端口，当为mode为client时为转发至本地客户端的端口")
-	svrAddr   = flag.String("svraddr", "127.0.0.1", "当mode为client时有效，为连接服务器的地址")
+	tcpPort   = flag.Int("tp", 0, "Socket连接或者监听的端口")
+	httpPort  = flag.Int("hp", 0, "当mode为server时为服务端监听端口，当为mode为client时为转发至本地客户端的端口")
+	svrAddr   = flag.String("addr", "127.0.0.1", "为连接服务器的地址,考虑取消")
 	verifyKey = flag.String("vkey", "", "用作客户端与服务端连接时的校验")
 )
 

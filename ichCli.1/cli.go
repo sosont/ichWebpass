@@ -1,6 +1,5 @@
 package main
-// 穿透客户端
-// 2018-04-06 by:yq
+
 import (
 	"encoding/binary"
 	"errors"
@@ -13,7 +12,7 @@ import (
 )
 
 var (
-	disabledRedirect = errors.New("Disabled connect.")
+	disabledRedirect = errors.New("disabled redirect.")
 )
 
 type TRPClient struct {
@@ -124,7 +123,7 @@ func (c *TRPClient) process() error {
 		case "msg0":
 			log.Println("服务端返回错误。")
 		default:
-			log.Println("Nothing error。")// 不知道啥错误
+			// 不知道啥错误，不输出了
 		}
 	}
 	return nil

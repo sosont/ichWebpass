@@ -1,0 +1,1 @@
+ichcli --addr=serverIP --hp=80 --tp=1227 --rhp=8080 --vkey="you key"
