@@ -1,54 +1,38 @@
 package main
 
+//穿透内网连接服务端主程序
+//2018-04-07 by:yaoqi
 import (
-	"io"
-	"net/http"
-	//"strings"
-	"time"
+	"flag"
+	"log"
 )
 
 var (
-	server = &http.Server{
-		Addr:           ":9090",
-		Handler:        &ppserver{},
-		ReadTimeout:    10 * time.Second,
-		WriteTimeout:   10 * time.Second,
-		MaxHeaderBytes: 1 << 20,
-	}
-
-	handlersMap = make(map[string]HandlersFunc)
+	tcpPort   = flag.Int("tp", 0, "Socket连接或者监听的端口")
+	httpPort  = flag.Int("hp", 0, "当mode为server时为服务端监听端口，当为mode为client时为转发至本地客户端的端口")
+	verifyKey = flag.String("vkey", "", "用作客户端与服务端连接时的校验")
 )
 
-type ppserver struct {
-}
-
-func (*ppserver) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if h, ok := handlersMap[r.URL.String()]; ok {
-		h(w, r)
-	}
-	//io.WriteString(w, "URL"+r.URL.String())
-}
-
-func f1(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "111111111111")
-}
-
-func f2(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "2222222222222")
-}
-
-type HandlersFunc func(http.ResponseWriter, *http.Request)
-
-func Hello(w http.ResponseWriter, req *http.Request) {
-	w.Write([]byte("Hello"))
-}
-
 func main() {
+	flag.Parse()
+	if *tcpPort <= 0 || *tcpPort >= 65536 {
+		log.Fatalln("请输入正确的tcp端口。")
+	}
+	if *httpPort <= 0 || *httpPort >= 65536 {
+		log.Fatalln("请输入正确的http端口。")
+	}
+	if *tcpPort == *httpPort {
+		log.Fatalln("tcp端口与http端口不能为同一个。")
+	}
+	if *verifyKey == "" {
+		log.Fatalln("必须输入一个验证的key")
+	}
+	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
+	log.Println("服务端启动，监听tcp服务端端口：", *tcpPort, "， http服务端端口：", *httpPort)
+	svr := NewRPServer(*tcpPort, *httpPort)
+	if err := svr.Start(); err != nil {
+		log.Fatalln(err)
 
-	handlersMap["/hello"] = Hello
-	handlersMap["/f1"] = f1
-	handlersMap["/f2"] = f2
-
-	server.ListenAndServe()
-
+		defer svr.Close()
+	}
 }

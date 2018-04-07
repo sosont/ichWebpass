@@ -1,4 +1,5 @@
 package util
+
 //http request和字节转换，验证已经完全通过，https没完全验证
 // 2018-04-05 by:yq
 import (
