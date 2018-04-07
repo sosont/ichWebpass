@@ -9,7 +9,6 @@ import (
 
 var (
 	svrAddr = flag.String("addr", "127.0.0.1", "为连接服务器的地址")
-
 	tcpPort        = flag.Int("tp", 0, "Socket连接server的端口")
 	remoteHttpProt = flag.Int("rhp", 0, "穿透远程开启HTTP端口")
 	httpPort       = flag.Int("hp", 0, "为转发至本地客户端的端口")
@@ -29,8 +28,8 @@ func main() {
 	if *tcpPort <= 0 || *tcpPort >= 65536 {
 		log.Fatalln("请输入正确的tcp端口。")
 	}
-	if *httpPort <= 0 || *httpPort >= 65536 {
-		log.Fatalln("请输入正确的http端口。")
+	if *httpPort <= 1000 || *httpPort >= 65536 {
+		log.Fatalln("请输入正确的http端口，1000-65536。")
 	}
 	if *tcpPort == *httpPort {
 		log.Fatalln("tcp端口与http端口不能为同一个。")

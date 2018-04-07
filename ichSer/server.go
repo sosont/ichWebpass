@@ -53,6 +53,14 @@ func (s *TRPServer) Close() error {
 	return errors.New("TCP实例未创建！")
 }
 
+func startServer(tp, hp int) {
+	svr := NewRPServer(tp, hp)
+	if err := svr.Start(); err != nil {
+		fmt.Println(err)
+		defer svr.Close()
+	}
+}
+
 func (s *TRPServer) tcpserver() error {
 	var err error
 	for {

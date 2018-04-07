@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<meta name="keywords" content="7Y-ichui框架">
+	<meta name="description" content="7Y-ichui为轻量级的练习使用网站后台管理系统模版。">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/static/layui/css/layui.css"  media="all">
+    <title>穿透列表</title>
+		<link rel="stylesheet" href="/static/css/ich.css">
+  </head>
+  
+  <body>
+ <div class="layui-row">
+<div class="layui-btn-group">
+  <button class="layui-btn">停用</button>
+  <button class="layui-btn">删除</button>
+</div>
+</div>
+		<table class="layui-hide" id="test"></table>
+		
+	 <script type="text/html" id="switchTpl">
+		 <!-- 这里的 checked 的状态只是演示 -->
+		 <input type="checkbox" name="sex" value="" lay-skin="switch" lay-text="女|男" lay-filter="sexDemo"  >
+	 </script>
+		
+	 <script type="text/html" id="checkboxTpl">
+		 <!-- 这里的 checked 的状态只是演示 -->
+		 <input type="checkbox" name="lock" value="" title="锁定" lay-filter="lockDemo"  >
+	 </script>
+	 
+								 
+						 
+	 <script src="/static/layui/layui.js" charset="utf-8"></script>
+	 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 --> 
+		
+	 <script>
+	 layui.use('table', function(){
+		 var table = layui.table
+		 ,form = layui.form;
+		 
+		 table.render({
+			 elem: '#test'
+			 ,url:'/api/getNatList/'
+			 ,cellMinWidth: 80
+			 ,cols: [[
+				 {type:'numbers'}
+				 ,{type: 'checkbox'}
+				 ,{field:'id', titlepp:'ID', width:100, unresize: true, sort: true}
+				 ,{field:'tcpPort', title:'传输端口', templet: '#usernameTpl'}
+				 ,{field:'formaddress', title:'来源公网IP'}
+				 ,{field:'openhttpport', title: '公网服务端口', minWidth:120, sort: true}
+				 ,{field:'httpport', title:'内网服务端口', width:85, templet: '#switchTpl', unresize: true}
+				 ,{field:'启用禁用', title:'是否锁定', width:110, templet: '#checkboxTpl', unresize: true}
+			 ]]
+			 ,page: true
+		 });
+		 
+		 //监听性别操作
+		 form.on('switch(sexDemo)', function(obj){
+			 layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+		 });
+		 
+		 //监听锁定操作
+		 form.on('checkbox(lockDemo)', function(obj){
+			 layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+		 });
+	 });
+	 </script>
+  </body>
+</html>

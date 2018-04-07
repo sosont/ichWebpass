@@ -1,5 +1,7 @@
 package main
 
+//穿透内网连接服务端主程序
+//2018-04-07 by:yaoqi
 import (
 	"flag"
 	"log"
@@ -8,7 +10,6 @@ import (
 var (
 	tcpPort   = flag.Int("tp", 0, "Socket连接或者监听的端口")
 	httpPort  = flag.Int("hp", 0, "当mode为server时为服务端监听端口，当为mode为client时为转发至本地客户端的端口")
-	svrAddr   = flag.String("addr", "127.0.0.1", "为连接服务器的地址,考虑取消")
 	verifyKey = flag.String("vkey", "", "用作客户端与服务端连接时的校验")
 )
 
@@ -32,6 +33,6 @@ func main() {
 	if err := svr.Start(); err != nil {
 		log.Fatalln(err)
 
-	defer svr.Close()
+		defer svr.Close()
 	}
 }
